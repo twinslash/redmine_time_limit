@@ -1,0 +1,9 @@
+<p>
+  <label>Remote IP match</label>
+  <%= text_field_tag 'settings[remote_ip_match]', @settings['remote_ip_match'] %>
+</p>
+<% statuses = IssueStatus.find(:all, :order => 'position') %>
+<p>
+  <label>Time statuses</label>
+  <%= select_tag 'settings[status_ids]', options_for_select(statuses.collect {|s| [s.name, s.id.to_s]}, @settings['status_ids']), :multiple => true %>
+</p>

@@ -1,0 +1,4 @@
+<%= link_to_remote('Pause',
+                   {:url => {:controller => 'timers', :action => 'pause', :issue_id => @issue},
+                    :success => "$$('.timer-save').each(function (elem) { elem.show() }); $$('.timer-start-pause').each(function (elem) { elem.replace(request.responseText); });"},
+                   :class => 'icon icon-time-add timer-start-pause') %>

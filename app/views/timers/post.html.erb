@@ -1,0 +1,36 @@
+<h2>Post issue timers</h2>
+<% if @timers && @timers.any? %>
+  <% form_tag do %>
+  <% if @time_limit_exceeded %>
+    <div id="errorExplanation" class="errorExplanation"><ul><li>Time limit exceeded</li></ul></div>
+  <% end %>
+  <% if @time_entries %>
+    <% for time_entry in @time_entries %>
+      <%= error_messages_for 'time_entry', :object => time_entry %>
+    <% end %>
+  <% end %>
+    <div class="box">
+      <table id="timer-table">
+        <% for timer in @timers %>
+          <tr>
+            <% values = params[:time_entries][timer.id.to_s] if params[:time_entries] %>
+            <td><%= link_to timer.issue, :controller => 'issues', :action => 'show', :id => timer.issue %></td>
+            <% hours = timer.hours
+               hours += (Time.now - timer.start).to_f / 3600 if timer.start %>
+            <td rel="hours"><%= text_field_tag "time_entries[#{timer.id}][hours]",
+                    values && values[:hours] ? values[:hours] : (hours > 0.01 ? (hours * 100).floor / 100.0 : nil),
+                    :size => 6 %></td>
+            <td><%= select_tag "time_entries[#{timer.id}][activity_id]",
+                               options_for_select(activity_collection_for_select_options,
+                                                  :selected => values ? values[:activity_id].to_i : nil) %></td>
+            <td><%= text_field_tag "time_entries[#{timer.id}][comments]",
+                                   values ? values[:comments] : nil, :size => 100 %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+    <%= submit_tag l(:button_save) %>
+  <% end %>
+<% end %>
+
+<% html_title 'Post issue timers' %>
