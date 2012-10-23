@@ -1,4 +1,3 @@
 # English strings go here for Rails i18n
 en:
-  my_label: "My label"
-  tl_remote_ip_settings: "Insert trusted IP"
+  tl_remote_ip_settings: "Insert trusted IP. For submasks use format 192.168.0.0/16"
