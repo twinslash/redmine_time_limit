@@ -1,6 +1,9 @@
 <p>
+  <%=t :tl_remote_ip_settings %>
+</p>
+<p>
   <label>Remote IP match</label>
-  <%= text_field_tag 'settings[remote_ip_match]', @settings['remote_ip_match'] %>
+  <%= text_area_tag 'settings[remote_ip_match]', @settings['remote_ip_match'], :size => "20x5" %>
 </p>
 <% statuses = IssueStatus.find(:all, :order => 'position') %>
 <p>

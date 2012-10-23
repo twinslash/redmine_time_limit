@@ -12,10 +12,30 @@ module Redmine
           before_filter :time_limit
         end
       end
+      # #===========================
+      # request = stub_model(Request, remote_ip: '127.0.0.1')
+      # request.persisted? # => true
+
+      # request = stub(remote_ip: '127.0.0.1')
+
+
+      # class Request
+      #   def remote_ip
+      #     '127.0.0.1'
+      #   end
+      # end
+      # request = Request.new
+
+      # #===========================
 
       module InstanceMethods
         def time_limit
           if User.current.logged?
+            p '======================'
+            p request.remote_ip
+            p '======================'
+            p request
+            p '======================'
             user = User.current
             local = request.remote_ip.match(Setting.plugin_redmine_time_limit['remote_ip_match'])
             update = false
