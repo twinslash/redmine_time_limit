@@ -15,6 +15,6 @@ class IpChecker
   private
 
     def parse(settings)
-      settings.split("\r\n")
+      settings.split("\r\n").map(&:strip).reject(&:empty?)
     end
 end
