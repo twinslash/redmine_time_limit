@@ -8,7 +8,7 @@ module ActionView
         if options and options[:id] and options[:id] == 'loggedas'
           time_limit_total = (Time.now - User.current.time_limit_begin).to_f / 3600
           time_limit = time_limit_total - User.current.time_limit_hours
-          result += content_tag(:div, :style => "float: right; margin-right: 1em;") do
+          result += content_tag(:div, :style => "float: right; margin-right: 1em;", :id => "time_limit_indicator") do
                       "#{(time_limit_total * 100).floor / 100.0} /
                        #{(time_limit * 100).floor / 100.0}"
                     end
