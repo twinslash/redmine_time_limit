@@ -16,7 +16,6 @@ class WhenPluginActivate < ActionDispatch::IntegrationTest
            :custom_values,
            :custom_fields_trackers
 
-
   test "time limit indicator should be available" do
     user_login
 
@@ -25,45 +24,32 @@ class WhenPluginActivate < ActionDispatch::IntegrationTest
     assert_select 'div#time_limit_indicator'
   end
 
-  test 'little time entry without permisions' do
+  test 'time entry without permisions' do
     disable_permissions(2)
     user_login
     set_time_limit(User.current)
 
-    put_little_time('/issues/1')
+    put_time('/issues/1', 1)
     assert_response 302
-  end
 
-  test 'much time entry without permisions' do
-    disable_permissions(2)
-    user_login
-
-    put_much_time('/issues/1')
+    put_time('/issues/1', 25)
     assert_response 200
     assert_select 'div#errorExplanation'
   end
 
-  test 'much time entry with edit_own_time_entries permision' do
-    enable_edit_own_time_entries_permissions(2)
+  test 'time entry with permisions' do
     user_login
 
-    put_much_time('/issues/1')
-    assert_response 302
-  end
-
-  test 'much time entry with no_time_limit permision' do
-    enable_no_time_limit_permissions(2)
-    user_login
-
-    put_much_time('/issues/1')
-    assert_response 302
-  end
-
-  test 'much time entry with permisions' do
     enable_permissions(2)
-    user_login
+    put_time('/issues/1', 25)
+    assert_response 302
 
-    put_much_time('/issues/1')
+    enable_no_time_limit_permissions(2)
+    put_time('/issues/1', 25)
+    assert_response 302
+
+    enable_edit_own_time_entries_permissions(2)
+    put_time('/issues/1', 25)
     assert_response 302
   end
 
@@ -80,18 +66,11 @@ class WhenPluginActivate < ActionDispatch::IntegrationTest
       usr.save!
     end
 
-    def put_much_time(url)
-      put url, :time_entry => {
-                  :hours => 25.0,
-                  :activity_id => 8,
-                  :comments => "//"}
-    end
-
-    def put_little_time(url)
-      put url, :time_entry => {
-                  :hours => 1.0,
-                  :activity_id => 8,
-                  :comments => "//"}
+    def put_time(url, time)
+          put url, :time_entry => {
+                :hours => time,
+                :activity_id => 8,
+                :comments => "//"}
     end
 
     def disable_permissions(role_id)
