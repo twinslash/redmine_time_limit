@@ -6,20 +6,19 @@ require 'time_limit_application_controller_patch'
 
 Rails.configuration.to_prepare do
   TimeEntry.send(:include, TimeLimitTimeEntryPatch)
-  #Redmine::MenuManager::MenuController.send(:include, Redmine::MenuManager::TimeLimitApplicationControllerPatch)
 end
 
 Redmine::Plugin.register :redmine_time_limit do
-  name 'Time Limit plugin'
-  author 'Twinslash Inc.'
+  name        'Time Limit plugin'
+  author      "// twinslash"
   description 'Plugin for limited time'
-  version '0.0.1'
+  version     '0.0.1'
+  url         'https://github.com/twinslash'
+  author_url  'http://twinslash.com'
 
-  #permission :timer_save, :timer => :save
+  permission :no_time_limit, :time_limit => :disable
 
   settings :default => {'remote_ip_match' => '127.0.0.1',
                         'statuses' => nil},
            :partial => 'settings/time_limit_settings'
 end
-
-#ActiveRecord::Base.observers << :journal_time_limit_observer
