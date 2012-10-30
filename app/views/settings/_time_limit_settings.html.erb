@@ -7,6 +7,9 @@
 </p>
 <% statuses = IssueStatus.find(:all, :order => 'position') %>
 <p>
+  <%=t :tl_issue_statuses_settings %>
+</p>
+<p>
   <label>Time statuses</label>
   <%= select_tag 'settings[status_ids]', options_for_select(statuses.collect {|s| [s.name, s.id.to_s]}, @settings['status_ids']), :multiple => true %>
 </p>

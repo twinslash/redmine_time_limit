@@ -4,8 +4,6 @@ require_dependency 'time_entry'
 
 module TimeLimitTimeEntryPatch
   def self.included(base)
-    base.send(:include, InstanceMethods)
-
     base.class_eval do
       unloadable
 
@@ -14,18 +12,13 @@ module TimeLimitTimeEntryPatch
       validates_each :hours do |record, attr, value|
         if not value.nil? and record.new_record?
           user = User.current
-          if user.time_limit_begin
-            time_limit = (Time.now - user.time_limit_begin).to_f / 3600 - user.time_limit_hours
-            record.errors.add attr, 'too much' if value > time_limit  && !user.allowed_to?(:edit_own_time_entries, record.project)
-          else
-            record.errors.add attr, 'invalid'
-          end
-        end
-      end
 
-      validates_each :issue_id do |record, attr, value|
-        if record.new_record? && record.issue
-          record.errors.add attr, 'invalid' unless record.issue.timer_save_allowed?
+          record.errors.add attr, 'invalid' if !user.time_limit_begin
+
+          if !have_permissions?(user, record.project)
+            record.errors.add attr, 'too much' if valid_time?(user, value)
+            record.errors.add attr, 'save depricated' if status_tabu?(record.issue)
+          end
         end
       end
 
@@ -34,28 +27,27 @@ module TimeLimitTimeEntryPatch
       end
 
       after_create do |record|
-        User.current.time_limit_hours += record.hours
-        User.current.save
-        timer = record.issue.timers.find(:first, :conditions => {:user_id => User.current.id})
-        timer.delete if timer
+        user = User.current
+        user.time_limit_hours += record.hours
+        user.save
       end
-
-      alias_method_chain :initialize, :time_limit unless method_defined?(:initialize_with_time_limit)
     end
-  end
 
-  module InstanceMethods
-    def initialize_with_time_limit(attrs = nil)
-      if attrs && attrs[:hours].nil? && attrs[:issue]
-        timer = attrs[:issue].timers.find(:first, :conditions => {:user_id => User.current.id})
-        if timer
-          hours = timer.hours
-          hours += (Time.now - timer.start).to_f / 3600 if timer.start
-          attrs[:hours] = (hours * 100).floor / 100.0 if hours > 0.01
-        end
+    class << base
+
+      def have_permissions?(usr, project)
+        have = false
+        have ||= usr.allowed_to?(:edit_own_time_entries, project)
+        have ||= usr.allowed_to?(:no_time_limit, project)
       end
-      initialize_without_time_limit(attrs) do
-        yield(self) if block_given?
+
+      def valid_time?(usr, value)
+        value > (Time.now - usr.time_limit_begin).to_f / 3600 - usr.time_limit_hours
+      end
+
+      def status_tabu?(issue)
+        status_ids = Setting.plugin_redmine_time_limit['status_ids'] || []
+        status_ids.include?(issue.status_id_was.to_s)
       end
     end
   end

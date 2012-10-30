@@ -29,10 +29,6 @@ module Redmine
               user.time_limit_begin = Time.now
               user.time_limit_hours = local ? 0 : 99
               user.save
-
-              timers = Timer.find(:all, :conditions => ['user_id = ? AND (start < ? OR start IS NULL)',
-                                                        user.id, Date.today])
-              timers.each {|t| t.delete}
             end
           end
         end
