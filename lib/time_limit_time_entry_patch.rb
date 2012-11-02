@@ -16,8 +16,8 @@ module TimeLimitTimeEntryPatch
           record.errors.add attr, 'invalid' if !user.time_limit_begin
 
           if !have_permissions?(user, record.project)
-            record.errors.add attr, 'too much' if valid_time?(user, value)
-            record.errors.add attr, 'save depricated' if status_tabu?(record.issue)
+            record.errors.add attr, I18n.t(:too_much) if valid_time?(user, value)
+            record.errors.add attr, I18n.t(:save_depricated) if status_tabu?(record.issue)
           end
         end
       end

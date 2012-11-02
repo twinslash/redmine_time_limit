@@ -13,7 +13,7 @@ Redmine::Plugin.register :redmine_time_limit do
   author      "// twinslash"
   description 'Plugin for limited time'
   version     '0.0.1'
-  url         'https://github.com/twinslash'
+  url         'https://github.com/twinslash/redmine_time_limit'
   author_url  'http://twinslash.com'
 
   permission :no_time_limit, :time_limit => :disable
