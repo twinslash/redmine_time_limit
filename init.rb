@@ -1,5 +1,7 @@
 require 'redmine'
 
+require_dependency 'redmine_time_limit/hooks'
+
 require 'time_limit_tag_helper_patch'
 require 'time_limit_time_entry_patch'
 require 'time_limit_application_controller_patch'
@@ -9,9 +11,9 @@ Rails.configuration.to_prepare do
 end
 
 Redmine::Plugin.register :redmine_time_limit do
-  name        'Time Limit plugin'
-  author      "// twinslash"
-  description 'Plugin for limited time'
+  name        'Redmine Time Limit plugin'
+  author      "//Twinslash"
+  description 'Plugin to limit time entries'
   version     '0.0.1'
   url         'https://github.com/twinslash/redmine_time_limit'
   author_url  'http://twinslash.com'
