@@ -1,3 +1,6 @@
-= time_limit
+= Redmine time limit plugin
 
-Description goes here
+This plugin allows control user's time entries:
+  * user should login to Redmine from local network or defined IP list to start timer
+  * user can not set up more time in Time Entries than timer
+  * user can not set up Time Entries in some statuses

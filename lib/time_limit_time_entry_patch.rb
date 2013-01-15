@@ -47,7 +47,7 @@ module TimeLimitTimeEntryPatch
 
       def status_tabu?(issue)
         status_ids = Setting.plugin_redmine_time_limit['status_ids'] || []
-        status_ids.include?(issue.status_id_was.to_s)
+        status_ids.include?(issue.status_id_was.to_s) && status_ids.include?(issue.status_id.to_s)
       end
     end
   end
