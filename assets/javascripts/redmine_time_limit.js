@@ -33,10 +33,10 @@ hideShowLogTimeIconIfProtected();
 $(document.body).ready(function() {
   // call this function twice: in loading process and after document ready
   // first calling to avoid displaying/blinking "Log time" at top
-  // seconnd one to hide "Log time" at bottom
+  // second one to hide "Log time" at bottom
   hideShowLogTimeIconIfProtected();
-  if ($('#issue_status_id')[0]) {
+  if ($('#issue_status_id')) {
     showHideLogTimeFieldset();
-    $('#issue_status_id')[0].onchange = showHideLogTimeFieldset;
+    $(document).on('change', '#issue_status_id', showHideLogTimeFieldset);
   }
 })
