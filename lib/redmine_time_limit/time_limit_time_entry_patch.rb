@@ -4,10 +4,16 @@ require_dependency 'time_entry'
 
 module TimeLimitTimeEntryPatch
   def self.included(base)
+
+    base.send(:include, InstanceMethods)
+
     base.class_eval do
       unloadable
 
+      attr_accessor :time_limit_allowed_ip
+
       validates_presence_of :comments
+      validate :validate_time_limit_allowed_ip
 
       validates_each :hours do |record, attr, value|
         if not value.nil? and record.new_record?
@@ -31,24 +37,35 @@ module TimeLimitTimeEntryPatch
         user.time_limit_hours += record.hours
         user.save
       end
+
+      class << base
+
+        def have_permissions?(usr, project)
+          have = false
+          have ||= usr.allowed_to?(:edit_own_time_entries, project)
+          have ||= usr.allowed_to?(:no_time_limit, project)
+        end
+
+        def valid_time?(usr, value)
+          value > (Time.now - usr.time_limit_begin).to_f / 3600 - usr.time_limit_hours
+        end
+
+        def status_tabu?(issue)
+          status_ids = Setting.plugin_redmine_time_limit['status_ids'] || []
+          status_ids.include?(issue.status_id_was.to_s) && status_ids.include?(issue.status_id.to_s)
+        end
+
+      end
     end
 
-    class << base
-
-      def have_permissions?(usr, project)
-        have = false
-        have ||= usr.allowed_to?(:edit_own_time_entries, project)
-        have ||= usr.allowed_to?(:no_time_limit, project)
-      end
-
-      def valid_time?(usr, value)
-        value > (Time.now - usr.time_limit_begin).to_f / 3600 - usr.time_limit_hours
-      end
-
-      def status_tabu?(issue)
-        status_ids = Setting.plugin_redmine_time_limit['status_ids'] || []
-        status_ids.include?(issue.status_id_was.to_s) && status_ids.include?(issue.status_id.to_s)
-      end
-    end
   end
+
+  module InstanceMethods
+
+    def validate_time_limit_allowed_ip
+      errors.add(:hours, I18n.t(:not_allowed_ip)) unless time_limit_allowed_ip
+    end
+
+  end
+
 end

@@ -1,19 +1,16 @@
 require 'date'
 
-module Redmine
-  module MenuManager
-    module TimeLimitApplicationControllerPatch
-      def MenuController.included(base)
-        base.extend(Redmine::MenuManager::MenuController::ClassMethods)
+module TimeLimit
+  module ApplicationControllerPatch
 
-        base.send(:include, InstanceMethods)
+    def self.included(base)
+      base.class_eval do
+        unloadable
 
-        base.class_eval do
-          before_filter :time_limit
-        end
-      end
+        before_filter :time_limit
 
-      module InstanceMethods
+        private
+
         def time_limit
           if User.current.logged?
             user = User.current
@@ -32,8 +29,8 @@ module Redmine
             end
           end
         end
+
       end
     end
   end
 end
-3
