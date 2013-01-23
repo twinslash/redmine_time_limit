@@ -5,3 +5,4 @@ en:
   permission_no_time_limit: "Disable time limit"
   too_much: "to much "
   save_depricated: "save depricated"
+  not_allowed_ip: "Your IP address is not allowed to create Time Entry"

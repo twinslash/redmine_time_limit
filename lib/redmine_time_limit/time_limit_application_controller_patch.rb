@@ -19,15 +19,15 @@ module Redmine
             user = User.current
 
             check_ip = IpChecker.new(Setting.plugin_redmine_time_limit['remote_ip_match'])
-            local = check_ip.trusted_ip?(request.remote_ip)
+            @allowed_ip = check_ip.trusted_ip?(request.remote_ip)
 
             update = false
-            update ||= user.time_limit_hours.to_f >= 99 && local
+            update ||= user.time_limit_hours.to_f >= 99 && @allowed_ip
             update ||= user.time_limit_begin == nil
             update ||= Date.parse(user.time_limit_begin.to_s) != Date.today
             if update
               user.time_limit_begin = Time.now
-              user.time_limit_hours = local ? 0 : 99
+              user.time_limit_hours = @allowed_ip ? 0 : 99
               user.save
             end
           end
@@ -36,3 +36,4 @@ module Redmine
     end
   end
 end
+3

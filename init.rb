@@ -1,14 +1,5 @@
 require 'redmine'
-
-require_dependency 'redmine_time_limit/hooks'
-
-require 'time_limit_tag_helper_patch'
-require 'time_limit_time_entry_patch'
-require 'time_limit_application_controller_patch'
-
-Rails.configuration.to_prepare do
-  TimeEntry.send(:include, TimeLimitTimeEntryPatch)
-end
+require 'redmine_time_limit'
 
 Redmine::Plugin.register :redmine_time_limit do
   name        'Redmine Time Limit plugin'
