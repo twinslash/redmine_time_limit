@@ -21,7 +21,9 @@ module TimeLimit
             update = false
             update ||= user.time_limit_hours.to_f >= 99 && @allowed_ip
             update ||= user.time_limit_begin == nil
-            update ||= Date.parse(user.time_limit_begin.to_s) != Date.today
+            date = Date.parse(user.time_limit_begin.to_s) rescue nil
+            update ||= date != Date.today
+
             if update
               user.time_limit_begin = Time.now
               user.time_limit_hours = @allowed_ip ? 0 : 99
