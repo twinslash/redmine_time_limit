@@ -43,6 +43,7 @@ module TimeLimitTimeEntryPatch
         def have_permissions?(usr, project)
           have = false
           have ||= usr.allowed_to?(:edit_own_time_entries, project)
+          have ||= usr.allowed_to?(:edit_time_entries, project)
           have ||= usr.allowed_to?(:no_time_limit, project)
         end
 
