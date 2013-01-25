@@ -1,5 +1,3 @@
-# require_dependency 'time_entry'
-
 module TimeLimitIssuePatch
   def self.included(base)
 
@@ -7,7 +5,7 @@ module TimeLimitIssuePatch
       attr_accessor :time_limit_allowed_ip
 
     base.class_eval do
-      # unloadable
+      unloadable
 
       attr_accessor :time_limit_allowed_ip
 
