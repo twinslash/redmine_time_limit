@@ -63,7 +63,10 @@ module TimeLimitTimeEntryPatch
   module InstanceMethods
 
     def validate_time_limit_allowed_ip
-      errors.add(:hours, I18n.t(:not_allowed_ip)) unless time_limit_allowed_ip
+      # add error if permission is not set and IP is not allowed
+      if !self.class.have_permissions?(user, project) && !time_limit_allowed_ip
+        errors.add(:hours, I18n.t(:not_allowed_ip))
+      end
     end
 
   end
