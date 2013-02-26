@@ -2,6 +2,12 @@
 en:
   tl_remote_ip_settings: "Insert trusted IP. For submasks use format 192.168.0.0/16"
   tl_issue_statuses_settings: "Select issue statuses for which you want to use the plugin"
+  tl_todo_working_status: "Select statuses which timer will use for issue when it starts/stops"
+  tl_start_status: "Start status"
+  tl_working_status: "Working status"
+  tl_remote_ip: "Remote IP match"
+  tl_time_statuses: "Time statuses"
+
   permission_no_time_limit: "Disable time limit"
   too_much: "too much "
   save_depricated: "save is depricated"

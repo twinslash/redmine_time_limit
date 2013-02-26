@@ -1,15 +1,35 @@
-<p>
-  <%=t :tl_remote_ip_settings %>
-</p>
-<p>
-  <label>Remote IP match</label>
-  <%= text_area_tag 'settings[remote_ip_match]', @settings['remote_ip_match'], :size => "20x5" %>
-</p>
-<% statuses = IssueStatus.find(:all, :order => 'position') %>
-<p>
-  <%=t :tl_issue_statuses_settings %>
-</p>
-<p>
-  <label>Time statuses</label>
-  <%= select_tag 'settings[status_ids]', options_for_select(statuses.collect {|s| [s.name, s.id.to_s]}, @settings['status_ids']), :multiple => true, :style => "width: 200px; height: 200px;" %>
-</p>
+<% statuses_options = IssueStatus.find(:all, :order => 'position').collect { |s| [s.name, s.id.to_s] } %>
+
+<div>
+  <p>
+    <%=t(:tl_remote_ip_settings) %>
+  </p>
+  <p>
+    <label> <%= t(:tl_remote_ip) %> </label>
+    <%= text_area_tag 'settings[remote_ip_match]', @settings['remote_ip_match'], :size => "20x5" %>
+  </p>
+
+  <p>
+    <%= t(:tl_issue_statuses_settings) %>
+  </p>
+  <p>
+    <label> <%= t(:tl_time_statuses) %> </label>
+    <%= select_tag 'settings[status_ids]', options_for_select(statuses_options, @settings['status_ids']), :multiple => true, :style => "width: 200px; height: 200px;" %>
+  </p>
+</div>
+
+<hr>
+
+<div>
+  <p>
+    <%=t :tl_todo_working_status %>
+  </p>
+  <p>
+    <label><%= t(:tl_start_status) %></label>
+    <%= select_tag 'settings[time_limit_start_status]', options_for_select(statuses_options, @settings['time_limit_start_status']) %>
+  </p>
+  <p>
+    <label><%= t(:tl_working_status) %></label>
+    <%= select_tag 'settings[time_limit_working_status]', options_for_select(statuses_options, @settings['time_limit_working_status']) %>
+  </p>
+</div>
