@@ -7,6 +7,16 @@ module TimeLimit
 
         before_filter :time_limit_check_ip, :only => [:update]
 
+        def start_timer
+          # write logic
+          redirect_to issue_path(@issue)
+        end
+
+        def stop_timer
+          # write logic
+          redirect_to issue_path(@issue)
+        end
+
         private
 
         def time_limit_check_ip

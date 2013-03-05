@@ -1,0 +1,29 @@
+<%= javascript_include_tag('redmine_time_limit.js', :plugin => 'redmine_time_limit') %>
+
+<% unless TimeEntry.have_permissions?(User.current, @project) %>
+  <% include_time_limit_js = true %>
+  <%= time_limit_protected_statuses_div %>
+
+  <%= javascript_tag do %>
+    hideShowLogTimeIconIfProtected();
+
+    $(document.body).ready(function() {
+      // call this function twice: in loading process and after document ready
+      // first calling to avoid displaying/blinking 'Log time' at top
+      // second one to hide 'Log time' at bottom
+      hideShowLogTimeIconIfProtected();
+      if ($('#issue_status_id')) {
+        showHideLogTimeFieldset();
+        $(document).on('change', '#issue_status_id', showHideLogTimeFieldset);
+      }
+    })
+  <% end %>
+<% end %>
+
+<% # TODO: write condition %>
+<% if true %>
+  <% include_time_limit_js = true %>
+  <%= javascript_tag do %>
+    $('#main #content .contextual').first().prepend('<%= link_to('Start', start_timer_path(@issue)) %>')
+  <% end %>
+<% end %>
