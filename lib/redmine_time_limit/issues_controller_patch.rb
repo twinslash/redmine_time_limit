@@ -11,12 +11,19 @@ module TimeLimit
         before_filter :time_limit_before_filters, :only => [:start_timer, :stop_timer]
 
         def start_timer
-          # write logic
+          Timer.start_new!(User.current, @issue)
+          flash[:notice] = l(:tl_timer_started)
           redirect_to issue_path(@issue)
         end
 
         def stop_timer
-          # write logic
+          timer = @issue.timers.current_opened(User.current.id).first
+          if timer
+            timer.stop!
+            flash[:notice] = l(:tl_timer_stopped)
+          else
+            flash[:error] = l(:tl_opened_timer_not_found)
+          end
           redirect_to issue_path(@issue)
         end
 

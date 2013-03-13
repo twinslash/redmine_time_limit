@@ -1,5 +1,13 @@
 # Russian strings go here for Rails i18n
 ru:
+  activerecord:
+    errors:
+      models:
+        timer:
+          attributes:
+            started_at:
+              tl_another_timers_are_opened: "Обнаружены другие активные таймеры"
+
   tl_remote_ip_settings: "Список доверенных IP-адресов. Для диапазона IP-адресов можно использовать маски подсети, формат записи маски подсети - 192.168.0.0/16 "
   tl_issue_statuses_settings: "Укажите статусы задач для которых запрещено списывать время"
   tl_todo_working_status: "Укажите статусы, в которые таймер будет переводить задачу при старте/остановке"
@@ -12,3 +20,9 @@ ru:
   too_much: "cписывается слишком много"
   save_depricated: "у вас нет прав списывать время на эту задачу"
   not_allowed_ip: "Ваш IP-адрес не позволяет списывать время"
+
+  tl_timer_started: "Таймер запущен"
+  tl_timer_stopped: "Таймер остановлен"
+  tl_opened_timer_not_found: "Активный таймер не найден"
+  tl_start_timer: "Старт"
+  tl_stop_timer: "Стоп"

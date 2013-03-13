@@ -38,5 +38,11 @@ module TimeLimitIssuePatch
         new_statuses_allowed_to(user) )
     end
 
+    # define if timer is started for this user
+    def timer_can_be_stopped?(user)
+      Timer.opened.where(:user_id => user.id).where(:issue_id => id).any?
+    end
+
+
   end
 end

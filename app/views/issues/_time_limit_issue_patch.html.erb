@@ -20,10 +20,15 @@
   <% end %>
 <% end %>
 
-<% # TODO: write condition %>
-<% if @issue.timer_can_be_started?(User.current) %>
+<% if (start = @issue.timer_can_be_started?(User.current)) || (stop = @issue.timer_can_be_stopped?(User.current)) %>
+  <% link = if start
+              link_to(t('tl_start_timer'), start_timer_path(@issue))
+            elsif stop
+              link_to(t('tl_stop_timer'), stop_timer_path(@issue))
+            end %>
+
   <% include_time_limit_js = true %>
   <%= javascript_tag do %>
-    $('#main #content .contextual').first().prepend('<%= link_to('Start', start_timer_path(@issue)) %>')
+    $('#main #content .contextual').first().prepend('<%= link %>')
   <% end %>
 <% end %>

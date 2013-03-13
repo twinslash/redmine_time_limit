@@ -1,5 +1,13 @@
 # English strings go here for Rails i18n
 en:
+  activerecord:
+    errors:
+      models:
+        timer:
+          attributes:
+            started_at:
+              tl_another_timers_are_opened: "There are another active timers"
+
   tl_remote_ip_settings: "Insert trusted IP. For submasks use format 192.168.0.0/16"
   tl_issue_statuses_settings: "Select issue statuses for which you want to use the plugin"
   tl_todo_working_status: "Select statuses which timer will use for issue when it starts/stops"
@@ -12,3 +20,9 @@ en:
   too_much: "too much "
   save_depricated: "save is depricated"
   not_allowed_ip: "Your IP address is not allowed to create Time Entry"
+
+  tl_timer_started: "Timer has been started"
+  tl_timer_stopped: "Timer has been stopped"
+  tl_opened_timer_not_found: "Opened timer not found"
+  tl_start_timer: "Start"
+  tl_stop_timer: "Stop"
