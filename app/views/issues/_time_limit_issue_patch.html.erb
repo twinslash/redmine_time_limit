@@ -21,7 +21,7 @@
 <% end %>
 
 <% # TODO: write condition %>
-<% if true %>
+<% if @issue.timer_can_be_started?(User.current) %>
   <% include_time_limit_js = true %>
   <%= javascript_tag do %>
     $('#main #content .contextual').first().prepend('<%= link_to('Start', start_timer_path(@issue)) %>')

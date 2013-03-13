@@ -9,6 +9,7 @@ require 'redmine_time_limit/timelog_controller_patch'
 
 require 'redmine_time_limit/time_limit_time_entry_patch'
 require 'redmine_time_limit/time_limit_issue_patch'
+require 'redmine_time_limit/time_limit_user_patch'
 
 Rails.configuration.to_prepare do
   ApplicationController.send(:include, TimeLimit::ApplicationControllerPatch)
@@ -17,4 +18,5 @@ Rails.configuration.to_prepare do
 
   TimeEntry.send(:include, TimeLimitTimeEntryPatch)
   Issue.send(:include, TimeLimitIssuePatch)
+  User.send(:include, TimeLimitUserPatch)
 end

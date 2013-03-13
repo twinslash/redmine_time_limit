@@ -26,10 +26,10 @@
   </p>
   <p>
     <label><%= t(:tl_start_status) %></label>
-    <%= select_tag 'settings[time_limit_start_status]', options_for_select(statuses_options, @settings['time_limit_start_status']) %>
+    <%= select_tag 'settings[time_limit_timer_start_status]', options_for_select(statuses_options, @settings['time_limit_timer_start_status']) %>
   </p>
   <p>
     <label><%= t(:tl_working_status) %></label>
-    <%= select_tag 'settings[time_limit_working_status]', options_for_select(statuses_options, @settings['time_limit_working_status']) %>
+    <%= select_tag 'settings[time_limit_timer_working_status]', options_for_select(statuses_options, @settings['time_limit_timer_working_status']) %>
   </p>
 </div>

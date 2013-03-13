@@ -10,7 +10,7 @@ Redmine::Plugin.register :redmine_time_limit do
   author_url  'http://twinslash.com'
 
   permission :no_time_limit, :time_limit => :disable
-  permission :issues, { :issues => [ :start_timer, :stop_timer ] }, :public => true
+  permission :time_limit_timer, { :issues => [ :start_timer, :stop_timer ] }, :public => true
 
   settings :default => {'remote_ip_match' => '127.0.0.1',
                         'statuses' => nil},
