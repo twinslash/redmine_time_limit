@@ -24,5 +24,8 @@ ru:
   tl_timer_started: "Таймер запущен"
   tl_timer_stopped: "Таймер остановлен"
   tl_opened_timer_not_found: "Активный таймер не найден"
+  tl_issue_cannot_change_status: "Статус задачи не может быть сменен"
+  tl_timer_cannot_be_started: "Таймер не может быть запущен"
+  tl_timer_has_errors: "Таймер не создан, что-то пошло не так."
   tl_start_timer: "Старт"
   tl_stop_timer: "Стоп"

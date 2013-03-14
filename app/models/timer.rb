@@ -16,13 +16,12 @@ class Timer < ActiveRecord::Base
     def start_new!(user, issue)
       timer = new(:user => user, :issue => issue, :started_at => Time.now)
       timer.stop_other_timers!
-      timer.save!
+      timer.save
     end
-
   end
 
   def stop!
-    update_attributes!(:stopped_at => Time.now)
+    update_attributes(:stopped_at => Time.now)
   end
 
   def stop_other_timers!
@@ -31,11 +30,16 @@ class Timer < ActiveRecord::Base
     end
   end
 
+  def closed?
+    !!stopped_at
+  end
+
   private
 
+    # check if current timer is not closed
     # other timers should be closed
     def status_other_timers
-      if Timer.current_opened(user.id).where("id <> ?", id).any?
+      if !closed? && Timer.current_opened(user.id).where("id <> ?", id).any?
         errors.add(:started_at, :tl_another_timers_are_opened)
       end
     end

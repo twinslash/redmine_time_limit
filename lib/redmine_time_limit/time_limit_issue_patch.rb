@@ -35,14 +35,13 @@ module TimeLimitIssuePatch
       settings = Setting.plugin_redmine_time_limit
       user.current_timer.try(:issue_id) != id &&
       (status_id.to_s == settings['time_limit_timer_working_status'] ||
-        new_statuses_allowed_to(user) )
+        new_statuses_allowed_to(user).map(&:id).include?(settings['time_limit_timer_working_status'].to_i) )
     end
 
     # define if timer is started for this user
     def timer_can_be_stopped?(user)
-      Timer.opened.where(:user_id => user.id).where(:issue_id => id).any?
+      timers.current_opened(User.current.id).any?
     end
-
 
   end
 end

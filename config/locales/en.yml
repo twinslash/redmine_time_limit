@@ -24,5 +24,8 @@ en:
   tl_timer_started: "Timer has been started"
   tl_timer_stopped: "Timer has been stopped"
   tl_opened_timer_not_found: "Opened timer not found"
+  tl_issue_cannot_change_status: "Issue cannot change status"
+  tl_timer_cannot_be_started: "Timer cannot be started"
+  tl_timer_has_errors: "Timer is not started. Something is wrong."
   tl_start_timer: "Start"
   tl_stop_timer: "Stop"
