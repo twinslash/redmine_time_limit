@@ -12,6 +12,12 @@ module TimeLimit
         private
 
         def time_limit
+          reset_clocks
+          close_timers
+        end
+
+        # update user's time_limit_begin/time_limit_hours
+        def reset_clocks
           if User.current.logged?
             user = User.current
 
@@ -30,6 +36,11 @@ module TimeLimit
               user.save
             end
           end
+        end
+
+        # close not actual (passed) timers
+        def close_timers
+          Timer.passed.current_opened(User.current).map(&:stop!)
         end
 
       end

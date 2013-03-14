@@ -4,11 +4,12 @@ class Timer < ActiveRecord::Base
   belongs_to :issue
 
   scope :today, lambda { where('started_at >= ?', Date.today.to_time) }
+  scope :passed, lambda { where('started_at <= ?', Date.today.to_time) }
   scope :opened, lambda { where(:stopped_at => nil) }
   scope :current_opened, lambda { |user_id| opened.where(:user_id => user_id) }
 
   validates_presence_of :user, :issue, :started_at
-  validate :status_other_timers
+  validate :find_other_opened_timers
 
   class << self
     # stop other opened timers
@@ -38,7 +39,7 @@ class Timer < ActiveRecord::Base
 
     # check if current timer is not closed
     # other timers should be closed
-    def status_other_timers
+    def find_other_opened_timers
       if !closed? && Timer.current_opened(user.id).where("id <> ?", id).any?
         errors.add(:started_at, :tl_another_timers_are_opened)
       end
