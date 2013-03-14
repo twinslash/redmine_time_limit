@@ -3,6 +3,8 @@ class Timer < ActiveRecord::Base
   belongs_to :user
   belongs_to :issue
 
+  before_save :calculate_spent_time
+
   scope :today, lambda { where('started_at >= ?', Date.today.to_time) }
   scope :passed, lambda { where('started_at <= ?', Date.today.to_time) }
   scope :opened, lambda { where(:stopped_at => nil) }
@@ -42,6 +44,12 @@ class Timer < ActiveRecord::Base
     def find_other_opened_timers
       if !closed? && Timer.current_opened(user.id).where("id <> ?", id).any?
         errors.add(:started_at, :tl_another_timers_are_opened)
+      end
+    end
+
+    def calculate_spent_time
+      if stopped_at
+        self.spent = stopped_at - started_at
       end
     end
 
