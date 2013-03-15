@@ -11,7 +11,7 @@ module TimeLimit
         before_filter :time_limit_before_filters, :only => [:start_timer, :stop_timer]
 
         # check if timer can be started
-        # fetch issues with started timer (which can change status to TODO)
+        # fetch issues with started timer (which can change status to TODO and assigned to User.current)
         # update issues
         # stop previous timers
         # start new timer
@@ -78,13 +78,16 @@ module TimeLimit
           authorize
         end
 
-        # fetch issues (it should be not more then one) which have active timer
+        # fetch issues (it should be not more then one) which
+        # have active timer
         # and in status status 'Working' (defined in plugin setting time_limit_timer_working_status)
         # and can be moved to status 'TODO' (defined in plugin setting time_limit_timer_start_status)
+        # and assigned to User.current
         def fetch_opened_issues
           issues = []
           @opened_timers.each do |timer|
             issue = timer.issue
+            next if issue.assigned_to != User.current
             # init journal to leave a record that status is changed
             issue.init_journal(User.current)
             if (issue.status_id == @settings['time_limit_timer_working_status'].to_i &&
