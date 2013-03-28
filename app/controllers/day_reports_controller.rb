@@ -4,7 +4,7 @@ class DayReportsController < ApplicationController
   helper :timelog
 
   def index
-    init_data
+    init_data(params)
     if request.post? && @timer_entry.valid?
       @timer_entry.save
       flash[:notice] = l(:tl_saved)
@@ -16,7 +16,7 @@ class DayReportsController < ApplicationController
 
   private
 
-    def init_data
+    def init_data(params = {})
       @issues = Issue.joins(:timers).
                       where("#{Timer.table_name}.user_id = ?", User.current.id).
                       where("#{Timer.table_name}.started_at >= ?", Date.today.to_time).

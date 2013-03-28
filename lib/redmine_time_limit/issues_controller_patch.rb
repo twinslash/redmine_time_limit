@@ -5,6 +5,8 @@ module TimeLimit
       base.class_eval do
         unloadable
 
+        helper :timers
+
         # skip this filter - it is necessary to prepare data
         skip_filter :authorize, :only => [:start_timer, :stop_timer]
         before_filter :time_limit_check_ip, :only => [:update]
