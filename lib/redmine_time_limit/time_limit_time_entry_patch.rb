@@ -10,7 +10,7 @@ module TimeLimitTimeEntryPatch
     base.class_eval do
       unloadable
 
-      attr_accessor :time_limit_allowed_ip
+      attr_accessor :time_limit_allowed_ip, :skip_issue_status_validation
 
       validates_presence_of :comments
       validate :validate_time_limit_allowed_ip
@@ -23,7 +23,9 @@ module TimeLimitTimeEntryPatch
 
           if !have_permissions?(user, record.project)
             record.errors.add attr, I18n.t(:too_much) if valid_time?(user, value)
-            record.errors.add attr, I18n.t(:save_depricated) if status_tabu?(record.issue)
+            if !record.skip_issue_status_validation && status_tabu?(record.issue)
+              record.errors.add attr, I18n.t(:save_is_not_allowed, record.issue.status.name)
+            end
           end
         end
       end
@@ -41,6 +43,7 @@ module TimeLimitTimeEntryPatch
       class << base
 
         def have_permissions?(usr, project)
+          return false unless usr
           have = false
           have ||= usr.allowed_to?(:edit_own_time_entries, project)
           have ||= usr.allowed_to?(:edit_time_entries, project)

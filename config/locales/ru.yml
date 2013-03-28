@@ -18,7 +18,7 @@ ru:
 
   permission_no_time_limit: "Не использовать ограничение на списание времени"
   too_much: "cписывается слишком много"
-  save_depricated: "у вас нет прав списывать время на эту задачу"
+  save_is_not_allowed: "у вас нет прав списывать время на задачу в этом статусе (%{status})"
   not_allowed_ip: "Ваш IP-адрес не позволяет списывать время"
 
   tl_timer_started: "Таймер запущен"
@@ -29,3 +29,16 @@ ru:
   tl_timer_has_errors: "Таймер не создан, что-то пошло не так."
   tl_start_timer: "Старт"
   tl_stop_timer: "Стоп"
+  tl_timers: "Таймеры"
+  tl_available: "Доступно"
+  tl_total: "Всего"
+  tl_entries: "Введено"
+  tl_saved: "Успешно сохранено"
+  tl_exceed_timer: "Значение больше допустимого (%{value})"
+
+  field_id: "#"
+  field_started_at: "Запущен"
+  field_stopped_at: "Остановлен"
+  field_spent: "Затраченно"
+  field_time: "Время"
+  field_comment: "Комментарий"

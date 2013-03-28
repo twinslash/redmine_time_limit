@@ -3,7 +3,7 @@ module TimeLimit
 
     def self.included(base)
       base.class_eval do
-        # unloadable
+        unloadable
 
         # skip this filter - it is necessary to prepare data
         skip_filter :authorize, :only => [:start_timer, :stop_timer]
@@ -58,7 +58,7 @@ module TimeLimit
               timer.stop!
               flash[:notice] = l(:tl_timer_stopped)
             else
-              flash[:error] = l(:tl_issue_cannot_change_status)
+              flash[:error] = l(:tl_issue_cannot_change_status) + '. ' + @issue.errors.full_messages.join('; ')
             end
           else
             flash[:error] = l(:tl_opened_timer_not_found)

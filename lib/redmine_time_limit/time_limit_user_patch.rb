@@ -17,5 +17,20 @@ module TimeLimitUserPatch
       timers.today.opened.first
     end
 
+    # total time from timer start
+    def time_limit_total
+      TimeLimitConverter.to_hours(Time.now - time_limit_begin)
+    end
+
+    # available time for timer
+    def time_limit_balance
+      value = (time_limit_total - time_limit_hours).round(2)
+      if value >= -24
+        value
+      else
+        'N/A'
+      end
+    end
+
   end
 end

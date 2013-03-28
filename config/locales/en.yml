@@ -18,7 +18,7 @@ en:
 
   permission_no_time_limit: "Disable time limit"
   too_much: "too much "
-  save_depricated: "save is depricated"
+  save_is_not_allowed: "save is not allowed in this status (%{status})"
   not_allowed_ip: "Your IP address is not allowed to create Time Entry"
 
   tl_timer_started: "Timer has been started"
@@ -29,3 +29,16 @@ en:
   tl_timer_has_errors: "Timer is not started. Something is wrong."
   tl_start_timer: "Start"
   tl_stop_timer: "Stop"
+  tl_timers: "Timers"
+  tl_available: "Available"
+  tl_total: "Total"
+  tl_entries: "Entries"
+  tl_saved: "Successfully saved"
+  tl_exceed_timer: "The value is greater than allowed (%{value})"
+
+  field_id: "#"
+  field_started_at: "Started at"
+  field_stopped_at: "Stopped at"
+  field_spent: "Spent"
+  field_time: "Time"
+  field_comment: "Comment"
