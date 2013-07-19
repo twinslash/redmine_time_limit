@@ -5,7 +5,7 @@ Redmine::Plugin.register :redmine_time_limit do
   name        'Redmine Time Limit plugin'
   author      "//Twinslash"
   description 'Plugin to limit time entries'
-  version     '0.0.1'
+  version     '0.1.0'
   url         'https://github.com/twinslash/redmine_time_limit'
   author_url  'http://twinslash.com'
 

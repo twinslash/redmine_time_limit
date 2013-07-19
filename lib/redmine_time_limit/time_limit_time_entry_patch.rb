@@ -35,9 +35,13 @@ module TimeLimitTimeEntryPatch
       end
 
       after_create do |record|
+        # add time to user's attribute time_limit_hours
         user = User.current
         user.time_limit_hours += record.hours
         user.save
+
+        # perform logic for timers when a new TimeEntry is created
+        Timer.new_time_entry_was_created(user, record.issue)
       end
 
       class << base
