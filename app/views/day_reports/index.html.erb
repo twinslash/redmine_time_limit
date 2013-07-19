@@ -13,7 +13,9 @@
           <th><%= l("field_#{column}")  %></th>
         <% end %>
         <th></th>
-        <th></th>
+        <% if last_column = (@timer_entry && @timer_entry.errors.any?) %>
+          <th></th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
@@ -22,14 +24,22 @@
           <td>
             <%= link_to_issue(issue, :truncate => 60) %>
           </td>
-          <td> <p><%= f.text_field :"time_entry_value_#{issue.id}", :size => 10, :required => true %></p> </td>
-          <td> <p><%= f.text_field :"time_entry_comment_#{issue.id}", :size => 60, :required => true %></p> </td>
+          <td> <p><%= f.text_field :"time_entry_value_#{issue.id}", :size => 6, :required => true %></p> </td>
+          <td> <p><%= f.text_field :"time_entry_comment_#{issue.id}", :required => true, class: 'time_limit_time_entry_report' %></p> </td>
           <td> <p><%= f.select :"time_entry_activity_#{issue.id}", activity_collection_for_select_options, :required => true %></p> </td>
-          <td>
-            <% if error = @timer_entry.errors["time_entry_value_#{issue.id}"] %>
-              <p> <%= error.join(', ') %> </p>
-            <% end %>
-          </td>
+          <% if last_column %>
+            <td>
+              <% if errors = @timer_entry.errors["time_entry_value_#{issue.id}"] %>
+                <div id='errorExplanation'>
+                  <ul>
+                    <% errors.each do |error| %>
+                      <li> <%= error %> </li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            </td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
