@@ -25,9 +25,11 @@ module TimeLimit
             opened_issues = fetch_opened_issues
 
             if timer = Timer.create(:user => User.current, :issue => @issue, :started_at => Time.now)
+              # save changes (new record in journal, status changes) in opened_issues
               opened_issues.map(&:save)
               @opened_timers.map(&:stop!)
 
+              change_assigned_to if @issue.assigned_to_id != User.current.id
               @issue.init_journal(User.current)
               @issue.safe_attributes = { 'status_id' => @settings['time_limit_timer_working_status'] }
               @issue.save
@@ -49,18 +51,26 @@ module TimeLimit
         def stop_timer
           if @issue.timer_can_be_stopped?(User.current)
             settings = Setting.plugin_redmine_time_limit
-            allowed_status = @issue.new_statuses_allowed_to(User.current).map(&:id).include?(settings['time_limit_timer_start_status'].to_i)
-            @issue.init_journal(User.current)
-            @issue.safe_attributes = { 'status_id' => settings['time_limit_timer_start_status'] } if allowed_status
-            can_be_saved = @issue.valid?
+            timer = @issue.timers.current_opened(User.current.id).first
 
-            if allowed_status && can_be_saved
-              timer = @issue.timers.current_opened(User.current.id).first
-              @issue.save!
+            # if issue assigned_to User.current then change status to TODO
+            # else just stop timer
+            if @issue.assigned_to_id == User.current.id
+              allowed_status = @issue.new_statuses_allowed_to(User.current).map(&:id).include?(settings['time_limit_timer_start_status'].to_i)
+              @issue.init_journal(User.current)
+              @issue.safe_attributes = { 'status_id' => settings['time_limit_timer_start_status'] } if allowed_status
+              can_be_saved = @issue.valid?
+
+              if allowed_status && can_be_saved
+                @issue.save!
+                timer.stop!
+                flash[:notice] = l(:tl_timer_stopped)
+              else
+                flash[:error] = l(:tl_issue_cannot_change_status) + '. ' + @issue.errors.full_messages.join('; ')
+              end
+            else
               timer.stop!
               flash[:notice] = l(:tl_timer_stopped)
-            else
-              flash[:error] = l(:tl_issue_cannot_change_status) + '. ' + @issue.errors.full_messages.join('; ')
             end
           else
             flash[:error] = l(:tl_opened_timer_not_found)
@@ -99,6 +109,16 @@ module TimeLimit
             end
           end
           issues
+        end
+
+        # update assigned_to in separate action because
+        # the settings in Redmine can forbid to change status to Working if issuse does not assign to user
+        def change_assigned_to
+          if @issue.assigned_to_id != User.current.id
+            @issue.init_journal(User.current)
+            @issue.safe_attributes = { 'assigned_to_id' => User.current.id }
+            @issue.save
+          end
         end
 
       end
