@@ -53,25 +53,16 @@ module TimeLimit
             settings = Setting.plugin_redmine_time_limit
             timer = @issue.timers.current_opened(User.current.id).first
 
-            # if issue assigned_to User.current then change status to TODO
-            # else just stop timer
-            if @issue.assigned_to_id == User.current.id
-              allowed_status = @issue.new_statuses_allowed_to(User.current).map(&:id).include?(settings['time_limit_timer_start_status'].to_i)
+            # if issue assigned_to User.current then try to change status to TODO
+            if @issue.assigned_to_id == User.current.id && allowed_status = @issue.new_statuses_allowed_to(User.current).map(&:id).include?(settings['time_limit_timer_start_status'].to_i)
               @issue.init_journal(User.current)
-              @issue.safe_attributes = { 'status_id' => settings['time_limit_timer_start_status'] } if allowed_status
-              can_be_saved = @issue.valid?
-
-              if allowed_status && can_be_saved
-                @issue.save!
-                timer.stop!
-                flash[:notice] = l(:tl_timer_stopped)
-              else
-                flash[:error] = l(:tl_issue_cannot_change_status) + '. ' + @issue.errors.full_messages.join('; ')
-              end
-            else
-              timer.stop!
-              flash[:notice] = l(:tl_timer_stopped)
+              @issue.safe_attributes = { 'status_id' => settings['time_limit_timer_start_status'] }
+              @issue.save
             end
+
+            # always stop timer
+            timer.stop!
+            flash[:notice] = l(:tl_timer_stopped)
           else
             flash[:error] = l(:tl_opened_timer_not_found)
           end
