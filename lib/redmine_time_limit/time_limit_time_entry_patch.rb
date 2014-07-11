@@ -7,6 +7,8 @@ module TimeLimitTimeEntryPatch
 
     base.send(:include, InstanceMethods)
 
+    attr_accessor :time_limit_allowed_ip
+
     base.class_eval do
       unloadable
 
